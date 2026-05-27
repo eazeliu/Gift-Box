@@ -53,7 +53,7 @@ body {
               opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1);
   
   /* ⭐️ 4秒一個循環、緩慢且 Smooth 的呼吸與跳動動畫 ⭐️ */
-  animation: boxIdleSmoothLoop 4s infinite ease-in-out alternate;
+  animation: boxIdleSmoothLoop 3s infinite ease-in-out alternate;
 }
 
 /* ==================== 點擊後的縮放狀態 ==================== */
@@ -104,13 +104,13 @@ body {
 /* ⭐️ 4秒一周期：為了防止動畫凍結，我們使用最標準、相容性最高的 transform 疊加寫法 ⭐️ */
 @keyframes boxIdleSmoothLoop {
   0% { 
-    transform: scale3d(0.9, 0.9, 1) translate3d(0, 4px, 0); 
+    transform: scale3d(0.9, 0.9, 1) translate3d(0, 16px, 0); 
   }
   50% {
     transform: scale3d(0.92, 0.92, 1) translate3d(0, 0, 0);
   }
   100% { 
-    transform: scale3d(0.94, 0.94, 1) translate3d(0, -4px, 0); 
+    transform: scale3d(0.94, 0.94, 1) translate3d(0, -16px, 0); 
   }
 }
 
