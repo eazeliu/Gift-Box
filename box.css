@@ -21,7 +21,6 @@ body {
   width: 100%;
 }
 
-/* ==================== 🏆 單個六角形方塊組件 🏆 ==================== */
 .crystal-box {
   position: relative;
   width: 30%;          
@@ -36,7 +35,6 @@ body {
   animation: boxIdleSmoothLoop 3s infinite ease-in-out alternate;
 }
 
-/* 核心方塊包裹器：這層專門用來綁定遮罩，絕對不拔除 */
 .box-core {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -53,7 +51,6 @@ body {
   mask-type: alpha;
 }
 
-/* ==================== 點擊後的狀態時序控制 ==================== */
 .crystal-box.active {
   animation: none !important; 
   animation: boxUltimateSequence 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
@@ -67,7 +64,6 @@ body {
   transition: all 0.5s ease;
 }
 
-/* ==================== 內部重複使用的三種通用圖層 ==================== */
 .layer {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   pointer-events: none;
@@ -132,7 +128,6 @@ body {
   animation: glowBreath 2s infinite ease-in-out;
 }
 
-/* ==================== 🎬 動畫動態效果 ==================== */
 @keyframes boxIdleSmoothLoop {
   0% { transform: scale3d(0.9, 0.9, 1) translate3d(0, 16px, 0); }
   50% { transform: scale3d(0.92, 0.92, 1) translate3d(0, 0, 0); }
@@ -145,14 +140,12 @@ body {
   25%  { transform: scale3d(1.15, 1.15, 1); }
   28%  { transform: scale3d(1.1, 1.1, 1); filter: drop-shadow(0 0 15px rgba(255,215,0,0.6)); }
 
-  /* 0.5s - 1.4s 期間：六角形完好地放大，並在外圍散發劇烈金光 */
   80%  { 
     transform: scale3d(1.6, 1.6, 1); 
     filter: drop-shadow(0 0 40px rgba(255, 190, 0, 1)) brightness(1.6); 
     opacity: 1;
   }
 
-  /* 1.4s - 1.8s ：方塊瞬間縮小蒸發，此時數字剛好無縫彈出 */
   100% { 
     transform: scale3d(0.05, 0.05, 1); 
     filter: drop-shadow(0 0 0px rgba(255,190,0,0)) brightness(1);
