@@ -1,7 +1,7 @@
-/* 基礎設定 */
+
 body {
   margin: 0; padding: 0;
-  background-color: #0d0d0d; /* 背景全黑 */
+  background-color: #0d0d0d;
   display: flex; justify-content: center; align-items: center;
   min-height: 100vh;
   overflow: hidden;
@@ -14,7 +14,6 @@ body {
   box-sizing: border-box;
 }
 
-/* 水平編排包裹器 */
 .wrapper-horizontal {
   display: flex;
   justify-content: space-between;
@@ -22,7 +21,6 @@ body {
   width: 100%;
 }
 
-/* ==================== 🏆 單個六角形方塊組件 🏆 ==================== */
 .crystal-box {
   position: relative;
   width: 30%;          
@@ -31,7 +29,7 @@ body {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   
-  /* ⭐️ 使用你改名後的 shape.svg ⭐️ */
+  /* 遮罩設定 */
   mask-image: url('img/shape.svg');
   mask-size: contain;
   mask-repeat: no-repeat;
@@ -42,94 +40,134 @@ body {
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
 
-  /* 防全黑關鍵：確保 Safari/Chrome 用透明度當遮罩 */
   mask-type: alpha;
   -webkit-mask-box-image: none;
 
-  /* 預設的微幅浮動與縮放視差（啟用硬體加速） */
+
   will-change: transform, opacity;
-  /* 初始狀態交給 animation 統一管理，這裡只保留過渡屬性 */
   transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
               opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1);
   
-  /* ⭐️ 4秒一個循環、緩慢且 Smooth 的呼吸與跳動動畫 ⭐️ */
   animation: boxIdleSmoothLoop 3s infinite ease-in-out alternate;
 }
 
-/* ==================== 點擊後的縮放狀態 ==================== */
 .crystal-box.active {
-  /* 1. 先強制拔掉原本的 idle 動畫，確保乾淨 */
   animation: none !important; 
-  /* 2. 透過瀏覽器重繪(Reflow)後執行新動畫，或者直接用 transition 配合 transform 達成更穩定的彈跳 */
-  /* 這裡我們修正動畫設定：確保它能蓋過預設狀態 */
-  animation: boxPopJump 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+  animation: boxUltimateSequence 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
   z-index: 10; 
+  overflow: visible !important;
 }
 
 .crystal-box.inactive {
-  /* 剩下的盒子停止呼吸動畫，維持靜態縮小狀態 */
   animation: none !important; 
   transform: scale3d(0.65, 0.65, 1) translate3d(0, 0, 0) !important;
-  opacity: 0.4;
+  opacity: 0.2; 
+  transition: all 0.5s ease;
 }
 
-/* ==================== 內部重複使用的三種通用圖層 ==================== */
 .layer {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   pointer-events: none;
 }
 
-/* 第一層：七彩背景（repeat-x 橫向重複，速度大約33秒） */
 .layer-aurora {
   background: url('img/h.png') center center / 200% 100% repeat-x;
-  /* 💡 修正點：背景位置動畫改用 background-position 控制，避免與父層 transform 衝突 */
   animation: auroraMove 33s infinite linear;
 }
 
-/* 第二層：金粉光點（repeat-y 縱向重複，速度大約20秒） */
 .layer-particles {
   background: url('img/v.png') center center / 100% 200% repeat-y;
   mix-blend-mode: screen; 
   animation: particleFloat 20s infinite linear;
 }
 
-/* 第三層（最頂）：玻璃主體結構 */
 .layer-glass {
   background: url('img/box.png') center center / 100% 100% no-repeat;
 }
 
+.lucky-number-wrapper {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  display: flex; justify-content: center; align-items: center;
+  z-index: 20;
+  pointer-events: none;
+}
 
-/* ==================== 🎬 動畫動態效果 ==================== */
+.lucky-number-box {
+  position: relative;
+  display: flex; justify-content: center; align-items: center;
+  width: 90px; height: 90px;
+  border: 2px solid #b58900;
+  border-radius: 50%;
+  box-shadow: inset 0 0 15px rgba(255, 179, 0, 0.3), 0 0 20px rgba(255, 143, 0, 0.2);
+  background-color: rgba(13, 13, 13, 0.8);
+  opacity: 0;
 
-/* ⭐️ 4秒一周期：為了防止動畫凍結，我們使用最標準、相容性最高的 transform 疊加寫法 ⭐️ */
+  animation: numberReveal 0.4s 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.number-text {
+  font-size: 48px;
+  font-weight: 900;
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  background: linear-gradient(135deg, #ffe082 0%, #ffb300 40%, #ff8f00 70%, #ffea00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.8));
+  z-index: 2;
+}
+
+.lucky-number-box::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 140px; height: 140px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(255,179,0,0.35) 0%, rgba(255,143,0,0.08) 50%, rgba(0,0,0,0) 70%);
+  z-index: 1;
+  border-radius: 50%;
+  animation: glowBreath 2s infinite ease-in-out;
+}
+
+
+
 @keyframes boxIdleSmoothLoop {
-  0% { 
-    transform: scale3d(0.9, 0.9, 1) translate3d(0, 16px, 0); 
+  0% { transform: scale3d(0.9, 0.9, 1) translate3d(0, 16px, 0); }
+  50% { transform: scale3d(0.92, 0.92, 1) translate3d(0, 0, 0); }
+  100% { transform: scale3d(0.94, 0.94, 1) translate3d(0, -16px, 0); }
+}
+
+@keyframes boxUltimateSequence {
+  0%   { transform: scale3d(0.9, 0.9, 1); filter: drop-shadow(0 0 0px rgba(255,215,0,0)); }
+  15%  { transform: scale3d(0.65, 0.65, 1); }
+  25%  { transform: scale3d(1.15, 1.15, 1); }
+  28%  { transform: scale3d(1.1, 1.1, 1); filter: drop-shadow(0 0 15px rgba(255,215,0,0.6)); }
+
+  
+  28%, 35% { -webkit-mask-image: none; mask-image: none; } 
+  83%  { 
+    transform: scale3d(1.6, 1.6, 1); 
+    filter: drop-shadow(0 0 40px rgba(255, 190, 0, 1)) brightness(1.6); 
+    opacity: 1;
   }
-  50% {
-    transform: scale3d(0.92, 0.92, 1) translate3d(0, 0, 0);
-  }
+
+
   100% { 
-    transform: scale3d(0.94, 0.94, 1) translate3d(0, -16px, 0); 
+    transform: scale3d(0.05, 0.05, 1); 
+    filter: drop-shadow(0 0 0px rgba(255,190,0,0)) brightness(1);
+    opacity: 0;
   }
 }
 
-/* ⭐️ 點擊彈跳動畫：最終完美停留在 1.1 倍 ⭐️ */
-@keyframes boxPopJump {
-  0% { transform: scale3d(0.9, 0.9, 1) translate3d(0, 0, 0); }
-  25% { transform: scale3d(0.65, 0.65, 1) translate3d(0, 0, 0); }   /* 快速縮小蓄力 */
-  70% { transform: scale3d(1.15, 1.15, 1) translate3d(0, 0, 0); }   /* 微幅超出目標製造彈感 */
-  100% { transform: scale3d(1.1, 1.1, 1) translate3d(0, 0, 0); }     /* 最終停留在 1.1 倍 */
+@keyframes numberReveal {
+  0% { opacity: 0; transform: scale(0); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
-/* 橫向移動背景圖 */
-@keyframes auroraMove {
-  0% { background-position: 0% center; }
-  100% { background-position: 200% center; }
+@keyframes glowBreath {
+  0%, 100% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.6; }
+  50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
 }
 
-/* 縱向移動金粉圖 */
-@keyframes particleFloat {
-  0% { background-position: center 0%; }
-  100% { background-position: center 200%; }
-}
+@keyframes auroraMove { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
+@keyframes particleFloat { 0% { background-position: center 0%; } 100% { background-position: center 200%; } }
