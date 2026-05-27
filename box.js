@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const boxWrapper = document.getElementById('boxWrapper');
   const totalBoxes = 3;
 
-  // 動態重複生成三個組件結構（精簡為純三層）
+
   for (let i = 1; i <= totalBoxes; i++) {
     const boxItem = document.createElement('div');
     boxItem.className = 'crystal-box';
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     boxWrapper.appendChild(boxItem);
   }
 
-  // 點擊邏輯控制
+
   boxWrapper.addEventListener('click', (event) => {
     const clickedBox = event.target.closest('.crystal-box');
     
@@ -29,14 +29,14 @@ document.addEventListener('DOMContentLoaded', () => {
       box.classList.remove('active', 'inactive');
       
       if (box === clickedBox) {
-        box.classList.add('active'); // 觸發快速縮小並放大到 1.2 倍
+        box.classList.add('active');
       } else {
-        box.classList.add('inactive'); // 剩下的縮小
+        box.classList.add('inactive'); 
       }
     });
 
     setTimeout(() => {
-      console.log(`第 ${clickedBox.dataset.id} 個六角形箱子成功開啟！`);
+      console.log(`box ${clickedBox.dataset.id} activated`);
     }, 500);
   });
 });
