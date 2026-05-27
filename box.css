@@ -58,8 +58,11 @@ body {
 
 /* ==================== 點擊後的縮放狀態 ==================== */
 .crystal-box.active {
-  /* 點擊瞬間強制覆蓋掉原本的 Idle 呼吸動畫，改跑 Q彈跳動動畫 */
-  animation: boxPopJump 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  /* 1. 先強制拔掉原本的 idle 動畫，確保乾淨 */
+  animation: none !important; 
+  /* 2. 透過瀏覽器重繪(Reflow)後執行新動畫，或者直接用 transition 配合 transform 達成更穩定的彈跳 */
+  /* 這裡我們修正動畫設定：確保它能蓋過預設狀態 */
+  animation: boxPopJump 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
   z-index: 10; 
 }
 
