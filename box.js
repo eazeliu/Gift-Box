@@ -8,9 +8,11 @@ document.addEventListener('DOMContentLoaded', () => {
     boxItem.setAttribute('data-id', i);
 
     boxItem.innerHTML = `
-      <div class="layer layer-aurora"></div>
-      <div class="layer layer-particles"></div>
-      <div class="layer layer-glass"></div>
+      <div class="box-core">
+        <div class="layer layer-aurora"></div>
+        <div class="layer layer-particles"></div>
+        <div class="layer layer-glass"></div>
+      </div>
     `;
 
     boxWrapper.appendChild(boxItem);
