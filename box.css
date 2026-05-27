@@ -1,4 +1,4 @@
-
+/* 基礎設定 */
 body {
   margin: 0; padding: 0;
   background-color: #0d0d0d; /* 背景全黑 */
@@ -14,7 +14,7 @@ body {
   box-sizing: border-box;
 }
 
-
+/* 水平編排包裹器 */
 .wrapper-horizontal {
   display: flex;
   justify-content: space-between;
@@ -22,7 +22,7 @@ body {
   width: 100%;
 }
 
-
+/* ==================== 🏆 單個六角形方塊組件 🏆 ==================== */
 .crystal-box {
   position: relative;
   width: 30%;          
@@ -31,7 +31,7 @@ body {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   
-  
+  /* ⭐️ 使用你改名後的 shape.svg ⭐️ */
   mask-image: url('img/shape.svg');
   mask-size: contain;
   mask-repeat: no-repeat;
@@ -42,83 +42,90 @@ body {
   -webkit-mask-repeat: no-repeat;
   -webkit-mask-position: center;
 
-
+  /* 防全黑關鍵：確保 Safari/Chrome 用透明度當遮罩 */
   mask-type: alpha;
   -webkit-mask-box-image: none;
 
-
+  /* 預設的微幅浮動與縮放視差（啟用硬體加速） */
   will-change: transform, opacity;
-  transform: scale3d(0.9, 0.9, 1);
+  /* 初始狀態交給 animation 統一管理，這裡只保留過渡屬性 */
   transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
               opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1);
   
-
+  /* ⭐️ 4秒一個循環、緩慢且 Smooth 的呼吸與跳動動畫 ⭐️ */
   animation: boxIdleSmoothLoop 4s infinite ease-in-out alternate;
 }
 
+/* ==================== 點擊後的縮放狀態 ==================== */
 .crystal-box.active {
-  
+  /* 點擊瞬間強制覆蓋掉原本的 Idle 呼吸動畫，改跑 Q彈跳動動畫 */
   animation: boxPopJump 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
   z-index: 10; 
 }
 
 .crystal-box.inactive {
-  animation: none; 
-  transform: scale3d(0.65, 0.65, 1) translate3d(0, 0, 0);
+  /* 剩下的盒子停止呼吸動畫，維持靜態縮小狀態 */
+  animation: none !important; 
+  transform: scale3d(0.65, 0.65, 1) translate3d(0, 0, 0) !important;
   opacity: 0.4;
 }
 
+/* ==================== 內部重複使用的三種通用圖層 ==================== */
 .layer {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   pointer-events: none;
 }
 
+/* 第一層：七彩背景（repeat-x 橫向重複，速度大約33秒） */
 .layer-aurora {
   background: url('img/h.png') center center / 200% 100% repeat-x;
-  will-change: transform;
+  /* 💡 修正點：背景位置動畫改用 background-position 控制，避免與父層 transform 衝突 */
   animation: auroraMove 33s infinite linear;
 }
 
+/* 第二層：金粉光點（repeat-y 縱向重複，速度大約20秒） */
 .layer-particles {
   background: url('img/v.png') center center / 100% 200% repeat-y;
   mix-blend-mode: screen; 
-  will-change: transform;
   animation: particleFloat 20s infinite linear;
 }
 
+/* 第三層（最頂）：玻璃主體結構 */
 .layer-glass {
   background: url('img/box.png') center center / 100% 100% no-repeat;
 }
 
 
+/* ==================== 🎬 動畫動態效果 ==================== */
+
+/* ⭐️ 4秒一周期：為了防止動畫凍結，我們使用最標準、相容性最高的 transform 疊加寫法 ⭐️ */
 @keyframes boxIdleSmoothLoop {
   0% { 
-    
-    transform: scale3d(0.9, 0.9, 1) translate3d(0, 3px, 0); 
+    transform: scale3d(0.9, 0.9, 1) translate3d(0, 4px, 0); 
   }
   50% {
-    
     transform: scale3d(0.92, 0.92, 1) translate3d(0, 0, 0);
   }
   100% { 
-    
-    transform: scale3d(0.94, 0.94, 1) translate3d(0, -3px, 0); 
+    transform: scale3d(0.94, 0.94, 1) translate3d(0, -4px, 0); 
   }
 }
 
-
+/* ⭐️ 點擊彈跳動畫：最終完美停留在 1.1 倍 ⭐️ */
 @keyframes boxPopJump {
-  0% { transform: scale3d(0.9, 0.9, 1); }
-  25% { transform: scale3d(0.65, 0.65, 1); }  
-  70% { transform: scale3d(1.15, 1.15, 1); }  
-  100% { transform: scale3d(1.1, 1.1, 1); }   
+  0% { transform: scale3d(0.9, 0.9, 1) translate3d(0, 0, 0); }
+  25% { transform: scale3d(0.65, 0.65, 1) translate3d(0, 0, 0); }   /* 快速縮小蓄力 */
+  70% { transform: scale3d(1.15, 1.15, 1) translate3d(0, 0, 0); }   /* 微幅超出目標製造彈感 */
+  100% { transform: scale3d(1.1, 1.1, 1) translate3d(0, 0, 0); }     /* 最終停留在 1.1 倍 */
 }
 
+/* 橫向移動背景圖 */
 @keyframes auroraMove {
   0% { background-position: 0% center; }
   100% { background-position: 200% center; }
 }
 
+/* 縱向移動金粉圖 */
 @keyframes particleFloat {
   0% { background-position: center 0%; }
   100% { background-position: center 200%; }
